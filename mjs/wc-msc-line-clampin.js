@@ -31,8 +31,8 @@ ${_wccss}
   
   --button-display: block;
   --mask:
-      linear-gradient(to top, black 0%, black 0%) 100% 100% / 100% 100% no-repeat exclude,
-      linear-gradient(to left, black 50%, transparent 100%) 100% 100% / var(--padding-size) 1lh no-repeat exclude;
+    linear-gradient(to top, black 0%, black 0%) 100% 100% / 100% 100% no-repeat exclude,
+    linear-gradient(to left, black 50%, transparent 100%) 100% 100% / var(--padding-size) 1lh no-repeat exclude;
 
   position: relative;
   font-size: inherit;
@@ -144,7 +144,8 @@ export class MscLineClampin extends HTMLElement {
     // nodes
     this.#nodes = {
       main: this.shadowRoot.querySelector('.main'),
-      button: this.shadowRoot.querySelector('.main__button')
+      button: this.shadowRoot.querySelector('.main__button'),
+      slot: this.shadowRoot.querySelector('.main__slot')
     };
 
     // config
@@ -155,6 +156,7 @@ export class MscLineClampin extends HTMLElement {
 
     // evts
     this._onClick = this._onClick.bind(this);
+    this._onSlotchange = this._onSlotchange.bind(this);
   }
 
   async connectedCallback() {
@@ -178,6 +180,7 @@ export class MscLineClampin extends HTMLElement {
     this.#data.controller = new AbortController();
     const signal = this.#data.controller.signal;
     this.#nodes.button.addEventListener('click', this._onClick, { signal });
+    this.#nodes.slot.addEventListener('slotchange', this._onSlotchange, { signal });
   }
 
   disconnectedCallback() {
@@ -232,6 +235,10 @@ export class MscLineClampin extends HTMLElement {
   _onClick() {
     this.#nodes.main.classList.toggle('main--expand', true);
     this.#fireEvent(custumEvents.expand);
+  }
+
+  _onSlotchange() {
+    this.#nodes.main.classList.toggle('main--expand', false);
   }
 }
 
